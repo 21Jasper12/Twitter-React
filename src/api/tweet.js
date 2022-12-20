@@ -50,9 +50,27 @@ export const createTweet = async (payload) => {
 
     console.log('res', res)
 
-    return res.data.postedTweet;
+    return res.data.data
   } catch (err) {
     console.error('[Create Tweet failed]:', err);
+  }
+}
+
+
+// 新增_回覆
+export const createReply = async (payload) => {
+  try {
+    const { tweetId, UserId, comment } = payload
+    const res = await axiosInstance.post(`${baseUrl}/tweets/${tweetId}/replies`, {
+      UserId,
+      comment
+    });
+
+    console.log('res', res)
+
+    return res.data.data
+  } catch (err) {
+    console.error('[Create Reply failed]:', err);
   }
 }
 

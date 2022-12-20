@@ -14,7 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 const HomePage = () => {
   console.log('HomePage')
   const navigate = useNavigate();
-  const { isAuthenticated, currentUser } = useAuth();
+  const { isAuthenticated, currentUser, update } = useAuth();
   const [tweet, setTweet] = useState(null)
   const [tweets, setTweets] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -26,16 +26,11 @@ const HomePage = () => {
 
   const handleCreateTweet = async (value) => {
     // 頁面資料處理
-    console.log('descript:', value);
-
     try {
       const result = await createTweet({
         UserId: currentUser.id,
         description: value,
       });
-
-      console.log('result', result);
-
       setTweets((prevTweets) => {
         return [{
           ...result,
@@ -43,30 +38,17 @@ const HomePage = () => {
           User: { ...currentUser }
         }, ...prevTweets]
       })
-
-
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 
   const handleCreateReply = (value) => {
     setModalOpen(false);
     console.log('reply:', value);
-    Swal.fire({
-      position: 'top',
-      title: '新增回覆成功！',
-      timer: 1000,
-      icon: 'success',
-      showConfirmButton: false,
-    });
-  }
+    // { tweetId, UserId, comment }
+    
 
-  const handleOpenReply = (chosedTweet) => {
-    setTweet({ ...chosedTweet });
-    setModalOpen(true);
-    // 打開Modale
-    console.log('reply:', chosedTweet);
     // Swal.fire({
     //   position: 'top',
     //   title: '新增回覆成功！',
@@ -74,6 +56,13 @@ const HomePage = () => {
     //   icon: 'success',
     //   showConfirmButton: false,
     // });
+  }
+
+  const handleOpenReply = (chosedTweet) => {
+    setTweet({ ...chosedTweet });
+    setModalOpen(true);
+    // 打開Modale
+    console.log('reply:', chosedTweet);
 
     // 新增Tweet這邊會在使用ReplyAPI
     setTweets(tweets.map(t => {
@@ -104,7 +93,6 @@ const HomePage = () => {
     }));
   }
 
-  console.log('isAuthenticated1', isAuthenticated)
   useEffect(() => {
     console.log('HomePage', 'useEffect')
     if (isAuthenticated) {
@@ -122,7 +110,7 @@ const HomePage = () => {
     }
     console.log('isAuthenticated2', isAuthenticated)
     console.log('currentUser', currentUser)
-  }, [isAuthenticated]);
+  }, [currentUser, isAuthenticated, navigate, update]);
 
 
   return (

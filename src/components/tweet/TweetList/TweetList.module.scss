@@ -37,9 +37,17 @@
 }
 
 .time {
-  
+  color: #6C757D;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+
   &::before {
     content: "•";
+    padding: 3px;
+    color: #6C757D;
+    font-size: 22px;
+    line-height: 16px;
   }
 }
 

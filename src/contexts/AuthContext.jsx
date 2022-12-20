@@ -11,6 +11,7 @@ const defaultAuthContext = {
   register: null,
   login: null,
   logout: null,
+  updatedAt: null
 }
 
 const AuthContext = createContext(defaultAuthContext)
@@ -20,6 +21,7 @@ export const useAuth = () => useContext(AuthContext)
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [currentUser, setCurrentUser] = useState(null)
+  const [updatedAt, setUpdatedAt] = useState(null)
   const { pathname } = useLocation()
 
   useEffect(() => {
@@ -58,6 +60,10 @@ export const AuthProvider = ({ children }) => {
     value={{
       isAuthenticated: isAuthenticated,
       currentUser: currentUser,
+      updatedAt: updatedAt,
+      update: () => {
+        setUpdatedAt(new Date())
+      },
       // 登入
       login: async (data) => {
         const result = await login({
