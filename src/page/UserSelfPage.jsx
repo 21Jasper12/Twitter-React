@@ -207,23 +207,40 @@ const UserSelfPage = () => {
   }
 
   useEffect(() => {
-    async function getUserAsync() {
+    async function getUserInfoAsync() {
       const { data } = await getUser(Number(id))
-      const userOwnTweets = await getUserTweets(Number(id))
-      const userReplyTweets = await getUserReplyTweets(Number(id))
-      const userLikeTweets = await getUserLikeTweets(Number(id))
 
-      console.log('UserData', data)
+      setUserInfo(data)
+    }
+
+    getUserInfoAsync()
+  },[id])
+
+  useEffect(() => {
+    async function getUserAsync() {
+      // const { data } = await getUser(Number(id))
+      // const userOwnTweets = await getUserTweets(Number(id))
+      // const userReplyTweets = await getUserReplyTweets(Number(id))
+      // const userLikeTweets = await getUserLikeTweets(Number(id))
+
+      const [userOwnTweets, userReplyTweets, userLikeTweets] = await Promise.all([
+        // getUser(Number(id)),
+        getUserTweets(Number(id)),
+        getUserReplyTweets(Number(id)),
+        getUserLikeTweets(Number(id))
+      ])
+
+      // console.log('UserData', data)
       console.log('UserTweets', userOwnTweets)
       console.log('UserReplies', userReplyTweets)
       console.log('UserLikes', userLikeTweets)
 
-      setUserInfo(data)
+      // setUserInfo(userInfo.data)
       setUserTweets(userOwnTweets ?
         userOwnTweets.map((tweet) => {
           return{
             ...tweet,
-            User: data
+            User: userInfo
           }
         }) : ''
       )
@@ -239,7 +256,7 @@ const UserSelfPage = () => {
       getUserAsync()
       
     }
-  }, [isAuthenticated, navigate, id, update])
+  }, [isAuthenticated, navigate, id, update, userInfo])
 
   return (
     <UserSelfArea
