@@ -226,8 +226,8 @@ const UserSelfPage = () => {
       const [userOwnTweets, userReplyTweets, userLikeTweets] = await Promise.all([
         // getUser(Number(id)),
         getUserTweets(Number(id)),
-        getUserReplyTweets(Number(id)),
-        getUserLikeTweets(Number(id))
+        // getUserReplyTweets(Number(id)),
+        // getUserLikeTweets(Number(id))
       ])
 
       // console.log('UserData', data)
